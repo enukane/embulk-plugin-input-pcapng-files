@@ -1,0 +1,11 @@
+exec: {}
+in:
+  type: pcapng
+  paths: [/Users/enukane/Documents/pcap/, /tmp]
+  threads: 3
+  schema:
+    - { name: frame.time_epoch, type: long }
+    - { name: frame.len, type: long }
+    - { name: wlan.ta, type: string }
+    - { name: wlan.ra, type: string }
+out: {type: stdout}
