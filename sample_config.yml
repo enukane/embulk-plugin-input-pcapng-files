@@ -1,6 +1,6 @@
 exec: {}
 in:
-  type: pcapng
+  type: pcapng_files
   paths: [/Users/enukane/Documents/pcap/, /tmp]
   threads: 3
   schema:
