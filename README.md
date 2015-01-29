@@ -10,6 +10,10 @@ To extract specific field from pcapng files
 2. specify fields to collect in "schema", name should correspond to tshark's field name
 
 
+## BUGs
+
+- "done" list is not properly handled
+
 ### ToDo
 
 - Obviously, most part duplicates to file input.
