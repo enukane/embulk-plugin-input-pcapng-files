@@ -35,7 +35,7 @@ module Embulk
       commit_reports = yield(task, columns, task['paths'].length)
       done = commit_reports.map{|hash| hash["done"]}.flatten.compact
 
-      return config.merge({ "done" => done })
+      return {"in" => {"done" => done}}  # TODO embulk bug. this should be {"done"=>done}
     end
 
     def initialize(task, schema, index, page_builder)
