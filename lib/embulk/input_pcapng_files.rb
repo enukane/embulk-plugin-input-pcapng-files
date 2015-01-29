@@ -47,7 +47,8 @@ module Embulk
     attr_reader :page_builder
 
     def run
-      each_packet(task['path'], schema[1..-1].map{|elm| elm.name}) do |hash|
+      path = task['paths'][@index]
+      each_packet(path, schema[1..-1].map{|elm| elm.name}) do |hash|
         entry = [ path ] + schema[1..-1].map {|c|
           convert(hash[c.name], c.type)
         }
@@ -55,7 +56,7 @@ module Embulk
       end
       @page_builder.finish # must call finish they say
 
-      return {"done" => paths}
+      return {"done" => path}
     end
 
     private
