@@ -6,11 +6,9 @@ module Embulk
     Plugin.register_input('pcapng_files', self)
 
     def self.transaction(config, &control)
-      threads = config.param('threads', :integer, default: 2)
       task = {
         'paths' => [],
         'done' => config.param('done', :array, default: []),
-        'paths_per_thread' => [],
       }
 
       task['paths'] = config.param('paths', :array, default: []).map {|path|
@@ -20,9 +18,8 @@ module Embulk
         }
       }.flatten
       task['paths'] = task['paths'] - task['done']
-      task['paths_per_thread'] = task['paths'].each_slice(task['paths'].length / threads + 1).to_a
 
-      if task['paths'] == []
+      if task['paths'].empty?
         raise "no valid pcapng file found"
       end
 
@@ -35,7 +32,7 @@ module Embulk
         Column.new(idx, "#{c['name']}", c['type'].to_sym)
       }
 
-      commit_reports = yield(task, columns, threads)
+      commit_reports = yield(task, columns, task['paths'].length)
       done = commit_reports.map{|hash| hash["done"]}.flatten.compact
 
       return config.merge({ "done" => done })
@@ -50,18 +47,11 @@ module Embulk
     attr_reader :page_builder
 
     def run
-      paths = task['paths_per_thread'][@index]
-      if paths == nil or paths == []
-        return {} # no task, no fail
-      end
-
-      paths.each do |path|
-        each_packet(path, schema[1..-1].map{|elm| elm.name}) do |hash|
-          entry = [ path ] + schema[1..-1].map {|c|
-            convert(hash[c.name], c.type)
-          }
-          @page_builder.add(entry)
-        end
+      each_packet(task['path'], schema[1..-1].map{|elm| elm.name}) do |hash|
+        entry = [ path ] + schema[1..-1].map {|c|
+          convert(hash[c.name], c.type)
+        }
+        @page_builder.add(entry)
       end
       @page_builder.finish # must call finish they say
 
