@@ -12,9 +12,11 @@ To extract specific field from pcapng files
 
 ## BUGs
 
-- "done" list is not properly handled
+- ~~"done" list is not properly handled~~
+  - fixed (2015/01/29) thanks to frsyuki
 
 ### ToDo
 
 - Obviously, most part duplicates to file input.
   - rewrite this as decoder or parser plugin?
+  - after it become capable to write parser plugin in ruby
