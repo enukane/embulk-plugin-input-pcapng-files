@@ -1,6 +1,6 @@
 Gem::Specification.new { |gem|
   gem.name              = 'embulk-plugin-input-pcapng-files'
-  gem.version           = '0.0.2'
+  gem.version           = '0.0.3'
 
   gem.summary           = gem.description = %q{embulk plugin for pcapng file input}
   gem.authors           = 'Naoya Kaneko'
