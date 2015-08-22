@@ -71,7 +71,7 @@ module Embulk
     def build_options(fields)
       options = ""
       fields.each do |field|
-        options += "-e '#{field}' "
+        options += "-e \"#{field}\" "
       end
       return options
     end
